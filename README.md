@@ -1,1 +1,1 @@
-# EventsAPI
+# DayZ - Game State Integration (GSI)

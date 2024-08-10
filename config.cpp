@@ -1,6 +1,6 @@
 class CfgPatches
 {
-    class EventsAPI
+    class GSI
     {   
         // Dependencies
         requiredAddons[] =
@@ -12,11 +12,11 @@ class CfgPatches
 
 class CfgMods 
 {
-    class EventsAPI
+    class GSI
     {   
         // Information
         type    = "mod";
-        name    = "EventsAPI";
+        name    = "DayZ Game State Integration";
         author  = "hurfy";
         version = "1.0.0";
 
@@ -34,7 +34,7 @@ class CfgMods
             // class engineScriptModule
             // {
             //     value="";
-            //     files[]={"scripts/1_Core"};
+            //     files[]={"DayzGSI/scripts/1_core"};
             // };
 
             
@@ -42,28 +42,28 @@ class CfgMods
             // class gameLibScriptModule
             // {
             //     value="";
-            //     files[]={"scripts/2_GameLib"};
+            //     files[]={"DayzGSI/scripts/2_gamelib"};
             // };
 
             // 3_Game
             class gameScriptModule
             {
                 value   = "";
-                files[] = {"EventsAPI/scripts/3_Game"};
+                files[] = {"DayzGSI/scripts/3_game"};
             };
 
             // 4_World
             class worldScriptModule
             {
                 value   = "";
-                files[] = {"EventsAPI/scripts/4_World"};
+                files[] = {"DayzGSI/scripts/4_world"};
             };
 
             // 5_Mission
             // class missionScriptModule
             // {
             //     value="";
-            //     files[]={"scripts/5_Mission"};
+            //     files[]={"DayzGSI/scripts/5_mission"};
             // };
         };
     };
