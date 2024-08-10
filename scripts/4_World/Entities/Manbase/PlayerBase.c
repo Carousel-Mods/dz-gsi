@@ -1,9 +1,15 @@
-// handlers.c
+// PlayerBase.c
 
-// This is a test case for sending requests when the player makes a jump, nothing to do with handlers in any way
 modded class PlayerBase
-{   
-    // Send a POST request to HTTP-server
+{
+    vector vectorPosition = GetPosition();
+
+    override void OnConnect()
+    {
+        super.OnConnect();
+    }
+
+    // TEMP: Send a POST request to HTTP-server
     override void OnJumpStart()
     {
         super.OnJumpStart();
@@ -21,6 +27,6 @@ modded class PlayerBase
 
         // Generate JSON string and send it
         string data = string.Format("{\"player\": {\"username\": \"%1\", \"steam_id\": %2}, \"action\": {\"type\": \"playerJump\", \"position\": \"%3\" }}", username, steamID, stringPosition);
-        SendPostRequest(data);
+        SendPostRequest("http://localhost:8080", "/", data);
     }
 }
