@@ -1,36 +1,38 @@
+# Load environment variables from .env file
 include .env
 
-# Variables
+# === PDrive paths =====================================================================================
 P_SOURCE := $(P_DRIVE_SOURCE_PATH)
+P_BUILDS := $(P_DRIVE_BUILDS_PATH)
+PBIP_KEY := $(BIP_PRIVATE_KEY)
 
-# Default mode
+# === Config ===========================================================================================
 .DEFAULT_GOAL := build
 
-# Clean all log files from DayZ directory
-.PHONY: clean_logs
-clean_logs:
-	./utils/LogsCleaner.bat
+# === Tasks ============================================================================================
 
-# Clean all source files to avoid conflict
-.PHONY: clean_source
-clean_source:
-	rmdir /S /Q $(P_SOURCE)
+# Clean before build
+clean:
+	@echo "[MAKE] <- Cleaning up source directory ->"
+	@rmdir /S /Q $(P_SOURCE) || true
+	@echo "[MAKE] <- Cleaning up logs directory ->"
+	@./utils/cleaner.bat
 
 # Copy mod files to P:/ drive
-.PHONY: copy
-copy: clean_logs clean_source
-	xcopy /E /I /Y * $(P_SOURCE)
+copy: clean
+	@echo "[MAKE] <- Copying files ->"
+	@xcopy /E /I /Y * $(P_SOURCE)
 
-# TODO: Create automatic mod building
-.PHONY: build
+# Automatic mod building
 build: copy
-	dir
+	@echo "[MAKE] <- Building addons ->"
+	@AddonBuilder.exe $(P_SOURCE) $(P_BUILDS)\addons -packonly -sign=$(PBIP_KEY) -project=P: -prefix=DayzGSI > logs\build.log 2>&1
+	@findstr /C:"Build Successful" build.log >nul && (echo "[MAKE] !!! Build successful !!!") || (echo "[MAKE] !!! Build failed !!!" && exit /b 1)
 
-# TODO: Create automatic mod running
-.PHONY: run
+# Run the game
 run: build
-	dir
+	@echo "[MAKE] <- Running the game ->"
+	./utils/debug.bat
 
-.PHONY: test
-test:
-	dir $(P_SOURCE)
+# Prevent make from complaining if the target doesn't exist
+.PHONY: clean copy build
